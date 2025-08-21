@@ -1,0 +1,190 @@
+# Default values for ecommerce-platform
+
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+
+replicaCount: 1
+
+image:
+  registry: docker.io
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+# Services configuration
+services:
+  storefront:
+    enabled: true
+    image:
+      repository: ecommerce/storefront
+      tag: "latest"
+    port: 3000
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "250m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+
+  bff:
+    enabled: true
+    image:
+      repository: ecommerce/bff
+      tag: "latest"
+    port: 4000
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "250m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+
+  catalog:
+    enabled: true
+    image:
+      repository: ecommerce/catalog
+      tag: "latest"
+    port: 5001
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "250m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+
+  order:
+    enabled: true
+    image:
+      repository: ecommerce/order
+      tag: "latest"
+    port: 5002
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "250m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+
+  payment:
+    enabled: true
+    image:
+      repository: ecommerce/payment
+      tag: "latest"
+    port: 5003
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "250m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+
+  email:
+    enabled: true
+    image:
+      repository: ecommerce/email
+      tag: "latest"
+    port: 5004
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "250m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+
+# Database configuration
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "admin"
+    username: "ecommerce"
+    password: "password"
+    database: "ecommerce"
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: true
+      size: 8Gi
+
+kafka:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 8Gi
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: ecommerce.local
+      paths:
+        - path: /
+          pathType: Prefix
+          service: storefront
+        - path: /api
+          pathType: Prefix
+          service: bff
+        - path: /admin
+          pathType: Prefix
+          service: admin
+  tls:
+    - secretName: ecommerce-tls
+      hosts:
+        - ecommerce.local
+
+# Monitoring
+prometheus:
+  enabled: true
+
+grafana:
+  enabled: true
+
+# Autoscaling
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Environment variables
+env:
+  NODE_ENV: "production"
+  DB_HOST: "postgresql"
+  DB_PORT: "5432"
+  REDIS_HOST: "redis-master"
+  REDIS_PORT: "6379"
+  KAFKA_HOST: "kafka"
+  KAFKA_PORT: "9092"

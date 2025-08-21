@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # Databases
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ecommerce
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./ops/docker/postgres/init:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # Message Broker
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  # Search Engine
+  typesense:
+    image: typesense/typesense:0.25.1
+    ports:
+      - "8108:8108"
+    environment:
+      TYPESENSE_DATA_DIR: /data
+      TYPESENSE_API_KEY: xyz
+    volumes:
+      - typesense_data:/data
+
+  # Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./ops/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+  # Development tools
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+
+volumes:
+  postgres_data:
+  redis_data:
+  kafka_data:
+  typesense_data:
+  grafana_data:

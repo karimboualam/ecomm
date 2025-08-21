@@ -1,0 +1,62 @@
+{
+  "name": "storefront",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/storefront",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/storefront"
+      },
+      "configurations": {
+        "development": {
+          "outputPath": "apps/storefront"
+        },
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/next:dev",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "storefront:build",
+        "dev": true,
+        "port": 3000
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "storefront:build:development",
+          "dev": true
+        },
+        "production": {
+          "buildTarget": "storefront:build:production",
+          "dev": false
+        }
+      }
+    },
+    "export": {
+      "executor": "@nx/next:export",
+      "options": {
+        "buildTarget": "storefront:build:production"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/storefront/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/storefront/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  },
+  "tags": ["scope:storefront", "type:app"]
+}

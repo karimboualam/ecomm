@@ -1,0 +1,100 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: bff-service
+    url: http://host.docker.internal:4000
+    plugins:
+      - name: cors
+        config:
+          origins:
+            - "http://localhost:3000"
+            - "https://yourdomain.com"
+          methods:
+            - GET
+            - POST
+            - PUT
+            - PATCH
+            - DELETE
+            - OPTIONS
+          headers:
+            - Accept
+            - Accept-Version
+            - Content-Length
+            - Content-MD5
+            - Content-Type
+            - Date
+            - X-Auth-Token
+            - Authorization
+          credentials: true
+      - name: rate-limiting
+        config:
+          minute: 100
+          hour: 1000
+
+  - name: catalog-service
+    url: http://host.docker.internal:5001
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 200
+          hour: 2000
+
+  - name: order-service
+    url: http://host.docker.internal:5002
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          hour: 1000
+
+  - name: payment-service
+    url: http://host.docker.internal:5003
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 50
+          hour: 500
+
+  - name: email-service
+    url: http://host.docker.internal:5004
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 20
+          hour: 200
+
+routes:
+  - name: bff-route
+    service: bff-service
+    paths:
+      - /graphql
+      - /api/bff
+
+  - name: catalog-route
+    service: catalog-service
+    paths:
+      - /api/v1/products
+      - /api/v1/categories
+
+  - name: order-route
+    service: order-service
+    paths:
+      - /api/v1/orders
+
+  - name: payment-route
+    service: payment-service
+    paths:
+      - /api/v1/payments
+      - /webhooks/stripe
+      - /webhooks/paypal
+
+  - name: email-route
+    service: email-service
+    paths:
+      - /api/v1/emails
+
+plugins:
+  - name: prometheus
+    config:
+      per_consumer: true

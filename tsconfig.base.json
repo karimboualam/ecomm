@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ecommerce/shared": ["libs/shared/src/index.ts"],
+      "@ecommerce/database": ["libs/database/src/index.ts"],
+      "@ecommerce/events": ["libs/events/src/index.ts"],
+      "@ecommerce/ui": ["libs/ui/src/index.ts"],
+      "@ecommerce/auth": ["libs/auth/src/index.ts"],
+      "@ecommerce/payment": ["libs/payment/src/index.ts"],
+      "@ecommerce/email": ["libs/email/src/index.ts"],
+      "@ecommerce/search": ["libs/search/src/index.ts"],
+      "@ecommerce/config": ["libs/config/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

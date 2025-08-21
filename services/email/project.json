@@ -1,0 +1,40 @@
+{
+  "name": "email",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "services/email/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/services/email",
+        "main": "services/email/src/main.ts",
+        "tsConfig": "services/email/tsconfig.app.json",
+        "assets": ["services/email/src/assets"]
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "options": {
+        "buildTarget": "email:build",
+        "port": 5004
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["services/email/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "services/email/jest.config.ts"
+      }
+    }
+  },
+  "tags": ["scope:email", "type:service"]
+}
