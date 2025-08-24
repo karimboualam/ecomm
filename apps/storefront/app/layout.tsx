@@ -1,4 +1,4 @@
-import './globals.css';
+/*import './globals.css';
 import { Inter } from 'next/font/google';
 import { ApolloWrapper } from './lib/apollo-wrapper';
 
@@ -26,6 +26,37 @@ export default function RootLayout({
         <ApolloWrapper>
           {children}
         </ApolloWrapper>
+      </body>
+    </html>
+  );
+}*/
+import './globals.css';
+import { Inter } from 'next/font/google';
+import type { Metadata } from 'next';
+import { ApolloWrapper } from './lib/apollo-wrapper';
+
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: 'E-Commerce Platform',
+  description: 'Modern scalable e-commerce platform',
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#000000',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <ApolloWrapper>{children}</ApolloWrapper>
       </body>
     </html>
   );

@@ -15,15 +15,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ecommerce/shared": ["libs/shared/src/index.ts"],
-      "@ecommerce/database": ["libs/database/src/index.ts"],
-      "@ecommerce/events": ["libs/events/src/index.ts"],
-      "@ecommerce/ui": ["libs/ui/src/index.ts"],
       "@ecommerce/auth": ["libs/auth/src/index.ts"],
-      "@ecommerce/payment": ["libs/payment/src/index.ts"],
+      "@ecommerce/config": ["libs/config/src/index.ts"],
+      "@ecommerce/database": ["libs/database/src/index.ts"],
       "@ecommerce/email": ["libs/email/src/index.ts"],
+      "@ecommerce/events": ["libs/events/src/index.ts"],
+      "@ecommerce/payment": ["libs/payment/src/index.ts"],
       "@ecommerce/search": ["libs/search/src/index.ts"],
-      "@ecommerce/config": ["libs/config/src/index.ts"]
+      "@ecommerce/shared": ["libs/shared/src/index.ts"],
+      "@ecommerce/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

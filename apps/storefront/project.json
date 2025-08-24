@@ -8,18 +8,14 @@
       "executor": "@nx/next:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
-      "options": {
-        "outputPath": "dist/apps/storefront"
-      },
+      "options": { "outputPath": "dist/apps/storefront" },
       "configurations": {
-        "development": {
-          "outputPath": "apps/storefront"
-        },
+        "development": { "outputPath": "apps/storefront" },
         "production": {}
       }
     },
     "serve": {
-      "executor": "@nx/next:dev",
+      "executor": "@nx/next:server",
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "storefront:build",
@@ -46,9 +42,7 @@
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "apps/storefront/jest.config.ts"
-      }
+      "options": { "jestConfig": "apps/storefront/jest.config.ts" }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
